@@ -1,0 +1,53 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * USART1 (ST-Link VCP, PA9/PA10) is dedicated to the CH9329 protocol.
+ * The board defaults route the console and shell to it; remove both so
+ * nothing but protocol replies is ever transmitted on this UART.
+ */
+
+/ {
+	chosen {
+		/delete-property/ zephyr,console;
+		/delete-property/ zephyr,shell-uart;
+		dezkvm,ch9329-uart = &usart1;
+	};
+};
+
+&usart1 {
+	current-speed = <115200>;
+	parity = "none";
+	data-bits = <8>;
+	stop-bits = "1";
+	status = "okay";
+};
+
+/*
+ * HID interfaces on OTG FS (CN15). Each node becomes its own USB interface.
+ * in-report-size must match the report sizes in hid_out.c.
+ */
+/ {
+	hid_kbd: hid_kbd {
+		compatible = "zephyr,hid-device";
+		label = "CH9329 Keyboard";
+		protocol-code = "keyboard";
+		in-report-size = <8>;
+		in-polling-period-us = <1000>;
+	};
+
+	hid_mouse_rel: hid_mouse_rel {
+		compatible = "zephyr,hid-device";
+		label = "CH9329 Mouse";
+		protocol-code = "mouse";
+		in-report-size = <4>;
+		in-polling-period-us = <1000>;
+	};
+
+	hid_mouse_abs: hid_mouse_abs {
+		compatible = "zephyr,hid-device";
+		label = "CH9329 Absolute Mouse";
+		protocol-code = "none";
+		in-report-size = <6>;
+		in-polling-period-us = <1000>;
+	};
+};

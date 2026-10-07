@@ -1,0 +1,35 @@
+# SPDX-License-Identifier: Apache-2.0
+
+menu "CH9329 emulator"
+
+config APP_USBD_VID
+	hex "USB Vendor ID"
+	default 0x046D
+	help
+	  Set this to the VID your existing firmware used.
+
+config APP_USBD_PID
+	hex "USB Product ID"
+	default 0xC534
+	help
+	  Set this to the PID your existing firmware used.
+
+config APP_USBD_MANUFACTURER
+	string "USB manufacturer string"
+	default "Logitech Inc."
+
+config APP_USBD_PRODUCT
+	string "USB product string"
+	default "Nano Receiver"
+
+config APP_USBD_REMOTE_WAKEUP
+	bool "Advertise remote wakeup and wake a suspended host on keypress"
+	default y
+
+config APP_FRAME_TIMEOUT_MS
+	int "Inter-byte silence (ms) after which a partial frame is discarded"
+	default 10
+
+endmenu
+
+source "Kconfig.zephyr"
